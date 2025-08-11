@@ -2,27 +2,34 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useBooking } from '../../contexts/BookingContext';
-import { Booking } from '../../services/MockAPI';
+import { Booking, Favorite } from '../../services/MockAPI';
+import { MockAPI } from '../../services/MockAPI';
 import Navbar from '../../components/Layout/Navbar';
-import { Calendar, MapPin, Trophy, Star, TrendingUp, Search, Filter, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar, MapPin, Trophy, Star, TrendingUp, Search, Filter, ChevronLeft, ChevronRight, Heart } from 'lucide-react';
 
 const UserDashboard: React.FC = () => {
   const { user } = useAuth();
   const { venues, getUserBookings } = useBooking();
   const [userBookings, setUserBookings] = React.useState<Booking[]>([]);
+  const [favorites, setFavorites] = React.useState<Favorite[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [searchLocation, setSearchLocation] = React.useState('Ahmedabad');
 
   React.useEffect(() => {
-    const loadUserBookings = async () => {
+    const loadUserData = async () => {
       if (user) {
         try {
           setIsLoading(true);
-          const bookings = await getUserBookings(user.id);
+          const [bookings, userFavorites] = await Promise.all([
+            getUserBookings(user.id),
+            MockAPI.getUserFavorites(user.id)
+          ]);
           setUserBookings(bookings || []);
+          setFavorites(userFavorites);
         } catch (error) {
-          console.error('Error loading user bookings:', error);
+          console.error('Error loading user data:', error);
           setUserBookings([]);
+          setFavorites([]);
         } finally {
           setIsLoading(false);
         }
@@ -31,7 +38,7 @@ const UserDashboard: React.FC = () => {
       }
     };
 
-    loadUserBookings();
+    loadUserData();
   }, [user, getUserBookings]);
 
   const upcomingBookings = userBookings.filter(b => b.status === 'confirmed');
@@ -63,59 +70,34 @@ const UserDashboard: React.FC = () => {
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Hero Section with Large Image */}
-        <div className="mb-8">
-          <div className="bg-gradient-to-r from-emerald-600 to-blue-600 rounded-2xl p-8 text-white">
-            {/* Top Row: Location Search */}
-            <div className="mb-6">
-              <div className="bg-white rounded-xl p-4 max-w-md">
-                <div className="flex items-center space-x-3">
-                  <MapPin className="w-5 h-5 text-emerald-600" />
-                  <input
-                    type="text"
-                    value={searchLocation}
-                    onChange={(e) => setSearchLocation(e.target.value)}
-                    placeholder="Search for locations in India"
-                    className="flex-1 text-gray-900 placeholder-gray-500 focus:outline-none"
-                  />
-                  <Search className="w-5 h-5 text-gray-400" />
-                </div>
-                <p className="text-xs text-gray-500 mt-2">Allow user to search for the locations in India. Allow autocomplete or suggestions for cities.</p>
+        {/* Hero Section */}
+        <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-2xl p-8 text-white mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div>
+              <h1 className="text-3xl lg:text-4xl font-bold mb-4">
+                FIND PLAYERS & VENUES NEARBY
+              </h1>
+              <p className="text-emerald-100 text-lg mb-6">
+                Discover the best sports venues in your area and book your next game
+              </p>
+              <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                <Link
+                  to="/user/court-booking"
+                  className="bg-white text-emerald-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-center"
+                >
+                  Book a Court
+                </Link>
+                <Link
+                  to="/user/venues"
+                  className="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-emerald-600 transition-colors text-center"
+                >
+                  Explore Venues
+                </Link>
               </div>
             </div>
-
-            {/* Main Hero Content with Image */}
-            <div className="flex items-center justify-between">
-              {/* Left Side: Text Content */}
-              <div className="flex-1 pr-8">
-                <h1 className="text-4xl font-bold mb-4">FIND PLAYERS & VENUES NEARBY</h1>
-                <p className="text-emerald-100 text-lg mb-6">Seamlessly explore sports venues and play with sports enthusiasts just like you!</p>
-                
-                <div className="flex flex-wrap gap-4">
-                  <Link
-                    to="/user/venues"
-                    className="bg-white text-emerald-600 px-6 py-3 rounded-lg font-semibold hover:bg-emerald-50 transition-colors flex items-center space-x-2"
-                  >
-                    <MapPin className="w-5 h-5" />
-                    <span>Browse Venues</span>
-                  </Link>
-                  <Link
-                    to="/user/bookings"
-                    className="bg-emerald-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-400 transition-colors flex items-center space-x-2"
-                  >
-                    <Calendar className="w-5 h-5" />
-                    <span>My Bookings</span>
-                  </Link>
-                </div>
-              </div>
-
-              {/* Right Side: Large Image */}
-              <div className="hidden lg:block w-96 h-64 bg-gray-200 rounded-xl flex items-center justify-center">
-                <div className="text-center text-gray-500">
-                  <div className="text-6xl mb-2">🖼️</div>
-                  <p className="text-lg font-medium">IMAGE</p>
-                  <p className="text-xs mt-1">In mobile view, hide the image section;<br/>all other elements and layout should remain unchanged.</p>
-                </div>
+            <div className="hidden lg:block">
+              <div className="w-full h-64 bg-white/20 rounded-lg flex items-center justify-center">
+                <span className="text-white text-lg font-medium">IMAGE</span>
               </div>
             </div>
           </div>
@@ -185,9 +167,10 @@ const UserDashboard: React.FC = () => {
           <div className="relative">
             <div className="flex space-x-16 overflow-x-auto pb-4 scrollbar-hide">
               {availableVenues.slice(0, 8).map((venue) => (
-                <div
+                <Link
                   key={venue.id}
-                  className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-200 min-w-[300px] flex-shrink-0"
+                  to={`/user/venue/${venue.id}`}
+                  className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-200 min-w-[300px] flex-shrink-0 cursor-pointer"
                 >
                   {/* Image Section - 60% of card height */}
                   <div className="h-48 bg-gray-200 relative overflow-hidden">
@@ -222,7 +205,7 @@ const UserDashboard: React.FC = () => {
                       {/* Sport tag */}
                       <span className="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-md font-medium flex items-center space-x-1">
                         <Search className="w-3 h-3" />
-                        <span>{venue.amenities?.find(a => ['Badminton', 'Football', 'Cricket', 'Swimming', 'Tennis', 'Table Tennis'].includes(a)) || 'Sport'}</span>
+                        <span>{venue.sports?.[0] || 'Sport'}</span>
                       </span>
                       {/* Indoor/Outdoor tag */}
                       <span className="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-md font-medium flex items-center space-x-1">
@@ -246,8 +229,15 @@ const UserDashboard: React.FC = () => {
                         <span>{venue.price}</span>
                       </span>
                     </div>
+                    
+                    {/* Book Now Button */}
+                    <div className="mt-3">
+                      <button className="w-full bg-emerald-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors">
+                        Book Now
+                      </button>
+                    </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
             
@@ -280,6 +270,88 @@ const UserDashboard: React.FC = () => {
             ))}
           </div>
         </div>
+
+        {/* Favorites Section */}
+        {favorites.length > 0 && (
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">My Favorites</h2>
+              <Link
+                to="/user/favorites"
+                className="text-emerald-600 hover:text-emerald-700 font-medium"
+              >
+                View All
+              </Link>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {favorites.slice(0, 3).map((favorite) => {
+                const venue = venues.find(v => v.id === favorite.venueId);
+                if (!venue) return null;
+                
+                return (
+                  <div key={favorite.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-200">
+                    <div className="relative">
+                      <img
+                        src={venue.image}
+                        alt={venue.name}
+                        className="w-full h-48 object-cover"
+                      />
+                      <button
+                        onClick={async () => {
+                          try {
+                            await MockAPI.removeFromFavorites(user!.id, venue.id);
+                            setFavorites(prev => prev.filter(f => f.id !== favorite.id));
+                          } catch (error) {
+                            console.error('Error removing from favorites:', error);
+                          }
+                        }}
+                        className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-red-50 transition-colors"
+                      >
+                        <Heart className="w-4 h-4 text-red-500 fill-current" />
+                      </button>
+                    </div>
+                    
+                    <div className="p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-semibold text-gray-900 text-lg">{venue.name}</h3>
+                        <div className="flex items-center space-x-1">
+                          <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                          <span className="text-sm font-medium text-gray-900">{venue.rating}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center text-gray-600 text-sm mb-3">
+                        <MapPin className="w-4 h-4 mr-1" />
+                        <span>{venue.location}</span>
+                      </div>
+                      
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-lg font-semibold text-emerald-600">₹{venue.price}</span>
+                        <span className="text-sm text-gray-500">{venue.sports?.[0] || 'Sport'}</span>
+                      </div>
+                      
+                      <div className="flex space-x-2">
+                        <Link
+                          to={`/user/venue/${venue.id}`}
+                          className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors text-center"
+                        >
+                          View Details
+                        </Link>
+                        <Link
+                          to={`/user/venue/${venue.id}`}
+                          className="flex-1 bg-emerald-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors text-center"
+                        >
+                          Book Now
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Recent Bookings */}
         {upcomingBookings.length > 0 && (

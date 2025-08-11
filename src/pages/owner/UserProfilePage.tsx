@@ -11,7 +11,7 @@ const UserProfilePage: React.FC = () => {
     fullName: user?.fullName || '',
     email: user?.email || '',
     phone: user?.phone || '',
-    role: user?.role || 'user'
+    role: user?.role || 'owner'
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -105,7 +105,6 @@ const UserProfilePage: React.FC = () => {
             disabled={!isEditing}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 disabled:bg-gray-50"
           >
-            <option value="user">User</option>
             <option value="owner">Owner</option>
             <option value="admin">Admin</option>
           </select>
@@ -138,7 +137,7 @@ const UserProfilePage: React.FC = () => {
                   fullName: user?.fullName || '',
                   email: user?.email || '',
                   phone: user?.phone || '',
-                  role: user?.role || 'user'
+                  role: user?.role || 'owner'
                 });
               }}
               className="bg-gray-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-600 transition-colors"
@@ -188,20 +187,6 @@ const UserProfilePage: React.FC = () => {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
                     Confirmed
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <button className="text-emerald-600 hover:text-emerald-900">View Details</button>
-                </td>
-              </tr>
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#BK002</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Football Ground Plus</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-01-20</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2:00 PM</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">
-                    Pending
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">

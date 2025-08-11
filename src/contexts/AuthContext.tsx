@@ -9,7 +9,7 @@ interface AuthContextType {
   verifyOTP: (otp: string) => Promise<boolean>;
   logout: () => void;
   clearAuth: () => void; // Add this for debugging
-  updateProfile: (data: Partial<User>) => Promise<boolean>;
+  updateProfile: (userId: string, data: Partial<User>) => Promise<boolean>;
   tempSignupData: SignupData | null;
 }
 

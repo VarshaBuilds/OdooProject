@@ -20,11 +20,9 @@ const VenuesPage: React.FC = () => {
   const sportOptions = useMemo(() => {
     const sports = new Set<string>();
     venues.forEach(venue => {
-      if (venue.amenities) {
-        venue.amenities.forEach(amenity => {
-          if (['Badminton', 'Football', 'Cricket', 'Swimming', 'Tennis', 'Table Tennis'].includes(amenity)) {
-            sports.add(amenity);
-          }
+      if (venue.sports) {
+        venue.sports.forEach(sport => {
+          sports.add(sport);
         });
       }
     });
@@ -40,6 +38,9 @@ const VenuesPage: React.FC = () => {
       filtered = filtered.filter(venue =>
         venue.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         venue.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (venue.sports && venue.sports.some(sport => 
+          sport.toLowerCase().includes(searchQuery.toLowerCase())
+        )) ||
         (venue.amenities && venue.amenities.some(amenity => 
           amenity.toLowerCase().includes(searchQuery.toLowerCase())
         ))
@@ -49,7 +50,7 @@ const VenuesPage: React.FC = () => {
     // Sport filter
     if (selectedSport) {
       filtered = filtered.filter(venue =>
-        venue.amenities && venue.amenities.includes(selectedSport)
+        venue.sports && venue.sports.includes(selectedSport)
       );
     }
 
@@ -234,9 +235,10 @@ const VenuesPage: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 mb-8">
             {paginatedVenues.map((venue) => (
-              <div
+              <Link
                 key={venue.id}
-                className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-200"
+                to={`/user/venue/${venue.id}`}
+                className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-200 cursor-pointer"
               >
                 {/* Image Section - 60% of card height */}
                 <div className="h-48 bg-gray-200 relative overflow-hidden">
@@ -271,7 +273,7 @@ const VenuesPage: React.FC = () => {
                     {/* Sport tag */}
                     <span className="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-md font-medium flex items-center space-x-1">
                       <Search className="w-3 h-3" />
-                      <span>{venue.amenities?.find(a => ['Badminton', 'Football', 'Cricket', 'Swimming', 'Tennis', 'Table Tennis'].includes(a)) || 'Sport'}</span>
+                      <span>{venue.sports?.[0] || 'Sport'}</span>
                     </span>
                     {/* Indoor/Outdoor tag */}
                     <span className="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-md font-medium flex items-center space-x-1">
@@ -295,10 +297,17 @@ const VenuesPage: React.FC = () => {
                       <span>{venue.price}</span>
                     </span>
                   </div>
+                  
+                  {/* Book Now Button */}
+                  <div className="mt-3">
+                    <button className="w-full bg-emerald-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors">
+                      Book Now
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              </Link>
+              ))}
+            </div>
         )}
 
         {/* Pagination */}

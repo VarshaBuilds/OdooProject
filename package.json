@@ -28,6 +28,19 @@
     "tailwindcss": "^4.1.11",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.3.0",
-    "vite": "^5.4.2"
-  }
+    "vite": "^5.4.19"
+  },
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VarshaBuilds/OdooProject.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VarshaBuilds/OdooProject/issues"
+  },
+  "homepage": "https://github.com/VarshaBuilds/OdooProject#readme",
+  "description": ""
 }

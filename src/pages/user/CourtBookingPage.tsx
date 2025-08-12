@@ -58,26 +58,26 @@ const CourtBookingPage: React.FC = () => {
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">Court Booking</h1>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8"  style={{padding:'3%'}}>
+          <h1 className="flex justify-center items-center text-3xl font-bold text-gray-900 mb-6" style={{padding:'1.5%'}} >Court Booking</h1>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12"  >
             {/* Left Side - Booking Form */}
             <div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">Booking Details</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-6" >Booking Details</h2>
               
-              <div className="space-y-6">
+              <div className="space-y-6" >
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2" style={{padding:'1.2%'}}>
                     Venue Name
                   </label>
-                  <select
+                  <select style={{padding:'2%'}}
                     name="venueName"
                     value={formData.venueName}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                   >
-                    <option value="">Select a venue</option>
+                    <option value="" >Select a venue</option>
                     {venues.map(venue => (
                       <option key={venue.id} value={venue.name}>
                         {venue.name}
@@ -87,10 +87,10 @@ const CourtBookingPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2 p-4"  style={{padding:'1.2%'}}>
                     Sport
                   </label>
-                  <select
+                  <select  style={{padding:'2%'}}
                     name="sport"
                     value={formData.sport}
                     onChange={handleInputChange}
@@ -107,10 +107,10 @@ const CourtBookingPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2"  style={{padding:'1.2%'}}>
                     Date
                   </label>
-                  <input
+                  <input  style={{padding:'2%'}}
                     type="date"
                     name="date"
                     value={formData.date}
@@ -119,12 +119,12 @@ const CourtBookingPage: React.FC = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4"  style={{padding:'1.2%'}}>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Start Time
                     </label>
-                    <input
+                    <input  style={{padding:'2%'}}
                       type="time"
                       name="startTime"
                       value={formData.startTime}
@@ -133,10 +133,10 @@ const CourtBookingPage: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2"  style={{padding:'1.2%'}}>
                       End Time
                     </label>
-                    <input
+                    <input  style={{padding:'2%'}}
                       type="time"
                       name="endTime"
                       value={formData.endTime}
@@ -150,7 +150,7 @@ const CourtBookingPage: React.FC = () => {
                   onClick={handleCheckAvailability}
                   className="w-full bg-emerald-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-emerald-700 transition-colors flex items-center justify-center space-x-2"
                 >
-                  <Check className="w-5 h-5" />
+                  <Check className="w-5 h-5"  style={{margin:'2%'}} />
                   <span>Check Availability</span>
                 </button>
               </div>
@@ -158,7 +158,7 @@ const CourtBookingPage: React.FC = () => {
 
             {/* Right Side - Available Slots */}
             <div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">Available Slots</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-6" >Available Slots</h2>
               
               <div className="space-y-3">
                 {availableSlots.map(slot => (
@@ -170,20 +170,20 @@ const CourtBookingPage: React.FC = () => {
                         : 'border-gray-200 bg-gray-50 opacity-50'
                     }`}
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
+                    <div className="flex items-center justify-between" >
+                      <div className="flex items-center space-x-3" style={{padding:'2%'}}>
                         <Clock className="w-5 h-5 text-emerald-600" />
                         <span className="font-medium text-gray-900">{slot.time}</span>
                       </div>
                       {slot.available ? (
                         <button
                           onClick={() => handleBookSlot(slot.id)}
-                          className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors"
+                          className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors" style={{padding:'3%'}}
                         >
                           Book Now
                         </button>
                       ) : (
-                        <span className="text-gray-500 text-sm">Booked</span>
+                        <span className=" text-gray-500 text-sm " style={{padding:'3%'}}>Booked</span>
                       )}
                     </div>
                   </div>
@@ -202,7 +202,7 @@ const CourtBookingPage: React.FC = () => {
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2" >
                   Notes
                 </label>
                 <textarea
@@ -216,7 +216,7 @@ const CourtBookingPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2" >
                   Number of Players
                 </label>
                 <input
@@ -241,7 +241,7 @@ const CourtBookingPage: React.FC = () => {
               <button
                 onClick={handleConfirmBooking}
                 className="flex-1 bg-emerald-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-emerald-700 transition-colors"
-              >
+              > 
                 Confirm Booking
               </button>
             </div>

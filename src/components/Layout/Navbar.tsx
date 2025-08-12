@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { Menu, X, ChevronDown, User, MapPin, Calendar, Settings, Heart } from 'lucide-react';
+import { Menu, X, ChevronDown, User, MapPin, Calendar, Settings, Heart, Trophy, LogOut } from 'lucide-react';
 
 const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
@@ -80,18 +80,19 @@ const Navbar: React.FC = () => {
   const navigationItems = getNavigationItems();
 
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-200">
+ <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link to="/" className="flex items-center space-x-2">
+          <div className="flex items-center">
+            <Link to="/" className=" flex items-center space-x-3" >
               <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">Q</span>
+                <Trophy className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-gray-900">QuickCourt</span>
+              <span className="text-xl font-bold text-gray-900" style={{paddingLeft:"10px"}}>QuickCourt</span>
             </Link>
           </div>
+
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex lg:items-center lg:space-x-8">
@@ -101,42 +102,49 @@ const Navbar: React.FC = () => {
                 to={item.href}
                 className="text-gray-700 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-2"
               >
-                <item.icon className="w-4 h-4" />
-                <span>{item.name}</span>
+                <item.icon className="w-4 h-4" style={{margin:'8px'}} />
+                <span style={{paddingRight:'5px'}}>{item.name}</span>
               </Link>
             ))}
           </div>
 
-          {/* User Menu */}
-          <div className="hidden lg:flex lg:items-center lg:space-x-4">
+          {/* User Menu Dropdown */}
+          <div className="hidden md:flex items-center">
             <div className="relative" ref={userDropdownRef}>
               <button
                 onClick={toggleUserDropdown}
-                className="flex items-center space-x-2 text-gray-700 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                className="flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors"
               >
-                <span>{user.fullName}</span>
-                <ChevronDown className="w-4 h-4" />
+                <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
+                  <User className="w-4 h-4 text-emerald-600" />
+                </div>
+                <span>{user?.fullName}</span>
+                <ChevronDown className={`w-4 h-4 transition-transform ${isUserDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
 
+              {/* Dropdown Menu */}
               {isUserDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-50">
                   <Link
-                    to={`/${user.role}/profile`}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    to={`/${user?.role}/profile`}
                     onClick={() => setIsUserDropdownOpen(false)}
+                    className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                   >
-                    Profile
+                    <User className="w-4 h-4" />
+                    <span>Profile</span>
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                    className="flex items-center space-x-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors w-full text-left"
                   >
-                    Logout
+                    <LogOut className="w-4 h-4" />
+                    <span>Logout</span>
                   </button>
                 </div>
               )}
             </div>
           </div>
+
 
           {/* Mobile menu button */}
           <div className="lg:hidden">
@@ -173,25 +181,29 @@ const Navbar: React.FC = () => {
             {/* Mobile Profile Link */}
             <Link
               to={`/${user.role}/profile`}
-              className="text-gray-700 hover:text-emerald-600 block px-3 py-2 rounded-md text-base font-medium transition-colors flex items-center space-x-2"
+              className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md text-base font-medium transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              <Settings className="w-4 h-4" />
+              <Settings className="w-5 h-5 text-emerald-600" />
               <span>Profile</span>
             </Link>
             
             {/* Mobile Logout */}
             <button
               onClick={handleLogout}
-              className="text-red-600 hover:text-red-700 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors"
+              className="flex items-center space-x-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-md text-base font-medium transition-colors w-full text-left"
             >
-              Logout
+              <LogOut className="w-5 h-5" />
+              <span>Logout</span>
             </button>
           </div>
         </div>
       )}
+      
     </nav>
   );
+
+  
 };
 
 export default Navbar;

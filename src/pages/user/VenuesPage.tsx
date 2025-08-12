@@ -121,7 +121,7 @@ const VenuesPage: React.FC = () => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Sports Venues</h1>
-          <p className="text-gray-600">Find and book the perfect sports facility for your needs</p>
+          <p className="text-gray-600" style={{marginBottom:'2%'}}>Find and book the perfect sports facility for your needs</p>
         </div>
 
         {/* Search and Filters */}
@@ -129,7 +129,7 @@ const VenuesPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             {/* Search */}
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Search className="absolute left-3 top-1/2  transform -translate-x-7/4 -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
                 placeholder="Search venues, locations..."
@@ -204,9 +204,7 @@ const VenuesPage: React.FC = () => {
           </div>
 
           <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
-            <p className="text-sm text-gray-600">
-              {filteredVenues.length} venues found
-            </p>
+            
             {(searchQuery || selectedSport || priceRange || venueType) && (
               <button
                 onClick={() => {
@@ -233,24 +231,24 @@ const VenuesPage: React.FC = () => {
             <p className="text-gray-600">Try adjusting your search criteria</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 mb-8" style={{margin:'5%'}}>
             {paginatedVenues.map((venue) => (
               <Link
                 key={venue.id}
                 to={`/user/venue/${venue.id}`}
-                className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-200 cursor-pointer"
+                className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-200 cursor-pointer" 
               >
                 {/* Image Section - 60% of card height */}
-                <div className="h-48 bg-gray-200 relative overflow-hidden">
-                  <img
+                <div className="h-48 bg-gray-110 relative overflow-hidden" style={{padding:'4%'}}>
+                  <img className="w-full h-full object-cover rounded-lg"
                     src={venue.image}
                     alt={venue.name}
-                    className="w-full h-full object-cover"
+                    
                   />
                 </div>
                 
                 {/* Details Section - 40% of card height */}
-                <div className="p-4">
+                <div className="p-4" style={{padding:'5px'}}>
                   {/* Venue Name and Rating - Same Row */}
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="font-semibold text-gray-900 text-lg">
@@ -292,15 +290,15 @@ const VenuesPage: React.FC = () => {
                       </span>
                     )}
                     {/* Price tag - show exact amount */}
-                    <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full font-medium flex items-center space-x-1">
+                    <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full font-medium flex items-center space-x-1" >
                       <span>₹</span>
                       <span>{venue.price}</span>
                     </span>
                   </div>
                   
                   {/* Book Now Button */}
-                  <div className="mt-3">
-                    <button className="w-full bg-emerald-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors">
+                  <div className="mt-3" style={{padding:'8%'}} >
+                    <button className="w-full bg-emerald-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors" style={{padding:'3%'}} >
                       Book Now
                     </button>
                   </div>
